@@ -23,6 +23,9 @@ resource "azurerm_subnet" "manager" {
   service_endpoint {
     service =  "Microsoft.Storage"
   }
+  service_endpoint {
+    service =  "Microsoft.CognitiveServices"
+  }
 
   delegation {
     name = "flex-consumption-delegation"
