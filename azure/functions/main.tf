@@ -55,9 +55,6 @@ resource "azurerm_function_app_flex_consumption" "alfa" {
 
   site_config {
 
-    application_insights_key               = azurerm_application_insights.insights[each.key].instrumentation_key
-    application_insights_connection_string = azurerm_application_insights.insights[each.key].connection_string
-
     app_service_logs {
       disk_quota_mb         = 40
       retention_period_days = 10
@@ -70,6 +67,10 @@ resource "azurerm_function_app_flex_consumption" "alfa" {
     "AzureWebJobsStorage"              = ""
     "AzureWebJobsStorage__accountName" = var.storage_account_name
     "AzureWebJobsStorage__credential"  = "managedidentity"
+
+    # Mueve las conexiones de Insights aquí para un control plano de variables de entorno
+    "APPINSIGHTS_INSTRUMENTATIONKEY"        = azurerm_application_insights.insights[each.key].instrumentation_key
+    "APPLICATIONINSIGHTS_CONNECTION_STRING" = azurerm_application_insights.insights[each.key].connection_string
 
     "FUNCTIONS_NODE_BLOCK_ON_ENTRY_POINT_ERROR" = "true"
     "KEYVAULT_URL"                              = "@Microsoft.KeyVault(VaultName=${var.key_vault_name};SecretName=key-vault-uri)"
